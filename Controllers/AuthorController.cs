@@ -7,20 +7,25 @@ namespace library.Controllers;
 [Route("authors")]
 public class AuthorsController : ControllerBase
 {
+    private readonly LibraryContext _context;
+
+    public AuthorsController(LibraryContext context)
+    {
+        _context = context;
+    }
+
     [HttpGet]
     public IActionResult GetAuthors()
     {
-        var context = new LibraryContext();
-        var authors = context.Authors.ToList();
+        var authors = _context.Authors.ToList();
 
         return Ok(authors);
     }
 
-    [HttpGet("{id:int}")]
+    [HttpGet("{id}")]
     public IActionResult GetAuthor(int id)
     {
-        var context = new LibraryContext();
-        var author = context.Authors
+        var author = _context.Authors
             .Single(a => a.Id == id);
 
         if (author == null)
@@ -34,18 +39,16 @@ public class AuthorsController : ControllerBase
     [HttpPost]
     public IActionResult CreateAuthor(Author author)
     {
-        var context = new LibraryContext();
-        context.Authors.Add(author);
-        context.SaveChanges();
+        _context.Authors.Add(author);
+        _context.SaveChanges();
 
         return Accepted();
     }
 
-    [HttpPut("{id:int}")]
+    [HttpPut("{id}")]
     public IActionResult UpdateAuthor(int id, Author data)
     {
-        var context = new LibraryContext();
-        var author = context.Authors
+        var author = _context.Authors
             .Single(a => a.Id == id);
 
         if (author == null)
@@ -54,16 +57,15 @@ public class AuthorsController : ControllerBase
         }
 
         author.Name = data.Name;
-        context.SaveChanges();
+        _context.SaveChanges();
 
         return Accepted();
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete("{id}")]
     public IActionResult DeleteAuthor(int id)
     {
-        var context = new LibraryContext();
-        var author = context.Authors
+        var author = _context.Authors
             .Single(a => a.Id == id);
 
         if (author == null)
@@ -71,8 +73,8 @@ public class AuthorsController : ControllerBase
             return NotFound();
         }
 
-        context.Authors.Remove(author);
-        context.SaveChanges();
+        _context.Authors.Remove(author);
+        _context.SaveChanges();
 
         return Accepted();
     }

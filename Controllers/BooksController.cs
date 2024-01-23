@@ -7,20 +7,25 @@ namespace library.Controllers;
 [Route("books")]
 public class BooksController : ControllerBase
 {
+    private readonly LibraryContext _context;
+
+    public BooksController(LibraryContext context)
+    {
+        _context = context;
+    }
+
     [HttpGet]
     public IActionResult GetBooks()
     {
-        var context = new LibraryContext();
-        var books = context.Books.ToList();
+        var books = _context.Books.ToList();
 
         return Ok(books);
     }
 
-    [HttpGet("{id:int}")]
+    [HttpGet("{id}")]
     public IActionResult GetBook(int id)
     {
-        var context = new LibraryContext();
-        var book = context.Books
+        var book = _context.Books
             .Single(b => b.Id == id);
 
         if (book == null)
@@ -34,18 +39,16 @@ public class BooksController : ControllerBase
     [HttpPost]
     public IActionResult CreateBook(Book book)
     {
-        var context = new LibraryContext();
-        context.Books.Add(book);
-        context.SaveChanges();
+        _context.Books.Add(book);
+        _context.SaveChanges();
 
         return Accepted();
     }
 
-    [HttpPut("{id:int}")]
+    [HttpPut("{id}")]
     public IActionResult UpdateBook(int id, Book data)
     {
-        var context = new LibraryContext();
-        var book = context.Books
+        var book = _context.Books
             .Single(b => b.Id == id);
 
         if (book == null)
@@ -56,16 +59,15 @@ public class BooksController : ControllerBase
         book.Title = data.Title;
         book.Description = data.Description;
         book.Author = data.Author;
-        context.SaveChanges();
+        _context.SaveChanges();
 
         return Accepted();
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete("{id}")]
     public IActionResult DeleteBook(int id)
     {
-        var context = new LibraryContext();
-        var book = context.Books
+        var book = _context.Books
             .Single(b => b.Id == id);
 
         if (book == null)
@@ -73,8 +75,8 @@ public class BooksController : ControllerBase
             return NotFound();
         }
 
-        context.Books.Remove(book);
-        context.SaveChanges();
+        _context.Books.Remove(book);
+        _context.SaveChanges();
 
         return Accepted();
     }

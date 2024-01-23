@@ -2,17 +2,17 @@
 
 **Descrição**
 
- Esse é um projeto de API de biblioteca no framework ASP.NET Core para gerenciar Livros e autores.
+ Esse é um projeto de API de biblioteca no framework ASP.NET Core para gerenciar livros e autores.
 
 **Recursos**
 
-* CRUD com livros de autores
-* Paginação com livros
+* CRUD com livros
+* CRUD com autores
 * Armazenamento em SQLite
 
 **Objetivos**
 
-O objetivo foi basicamente para eu aprender a mexer com o Entity Framework :p.
+O objetivo foi basicamente para eu aprender a mexer com o Entity Framework.
 
 **Instruções de instalação**
 
@@ -31,4 +31,4 @@ O objetivo foi basicamente para eu aprender a mexer com o Entity Framework :p.
 
 **Screenshots**
 
-![Exemplo de partida no terminal](other/Screenshot1.png)
+![Exemplo](other/Screenshot1.png)
