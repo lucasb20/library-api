@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 namespace library.Models;
 public class LibraryContext : DbContext
     {
-        public LibraryContext(DbContextOptions<LibraryContext> options) : base(options){
+        public LibraryContext(){
             var folder = Environment.SpecialFolder.LocalApplicationData;
             var path = Environment.GetFolderPath(folder);
             DbPath = Path.Join(path, "library.db");
