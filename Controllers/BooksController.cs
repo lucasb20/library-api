@@ -1,5 +1,6 @@
 using library.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace library.Controllers;
 
@@ -17,7 +18,9 @@ public class BooksController : ControllerBase
     [HttpGet]
     public IActionResult GetBooks()
     {
-        var books = _context.Books.ToList();
+        var books = _context.Books
+            .Include(b => b.Author)
+            .ToList();
 
         return Ok(books);
     }
@@ -28,6 +31,7 @@ public class BooksController : ControllerBase
         Book? book = null;
         try{
             book = _context.Books
+                .Include(b => b.Author)
                 .Single(b => b.Id == id);
         }
         catch(Exception){
@@ -40,11 +44,24 @@ public class BooksController : ControllerBase
     [HttpPost]
     public IActionResult CreateBook(Book book)
     {
+        Author? author = null;
+        try{
+            if(book.Author != null){
+                author = _context.Authors.Single(a => a.Id == book.Author.Id);
+            }
+            else{
+                throw new Exception();
+            }
+        }
+        catch(Exception){
+            return NotFound(new { message = "Author not found" });
+        }
+
         _context.Books.Add(new Book
         {
             Title = book.Title,
             Description = book.Description,
-            Author = book.Author
+            Author = author
         });
         _context.SaveChanges();
 
@@ -66,7 +83,7 @@ public class BooksController : ControllerBase
 
         book.Title = data.Title;
         book.Description = data.Description;
-        book.Author = data.Author;
+
         _context.SaveChanges();
 
         return Accepted(new { message = "Book updated" });

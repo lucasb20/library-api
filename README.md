@@ -16,7 +16,7 @@ O objetivo foi basicamente para eu aprender a mexer com o Entity Framework.
 
 **Instruções de instalação**
 
-**Requisitos de sistema**
+**Tecnologias utilizadas**
 
 * .NET 8.0.0
 * Entity Framework Core
@@ -31,4 +31,11 @@ O objetivo foi basicamente para eu aprender a mexer com o Entity Framework.
 
 **Screenshots**
 
-![Exemplo](other/Screenshot1.png)
+* `GET /authors`
+![Resultado de GET /authors](other/Screenshot_1.png)
+
+* `GET /books/<id>`
+![Resultado de GET /books/<id>](other/Screenshot_2.png)
+
+* `GET /books`
+![Resultado de GET /books](other/Screenshot_3.png)
