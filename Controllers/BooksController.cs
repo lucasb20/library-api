@@ -25,12 +25,13 @@ public class BooksController : ControllerBase
     [HttpGet("{id}")]
     public IActionResult GetBook(int id)
     {
-        var book = _context.Books
-            .Single(b => b.Id == id);
-
-        if (book == null)
-        {
-            return NotFound();
+        Book? book = null;
+        try{
+            book = _context.Books
+                .Single(b => b.Id == id);
+        }
+        catch(Exception){
+            return NotFound(new { message = "Book not found" });
         }
 
         return Ok(book);
@@ -39,21 +40,28 @@ public class BooksController : ControllerBase
     [HttpPost]
     public IActionResult CreateBook(Book book)
     {
-        _context.Books.Add(book);
+        _context.Books.Add(new Book
+        {
+            Title = book.Title,
+            Description = book.Description,
+            Author = book.Author
+        });
         _context.SaveChanges();
 
-        return Accepted();
+        return Accepted(new { message = "Book created" });
     }
 
     [HttpPut("{id}")]
     public IActionResult UpdateBook(int id, Book data)
     {
-        var book = _context.Books
-            .Single(b => b.Id == id);
+        Book? book = null;
 
-        if (book == null)
-        {
-            return NotFound();
+        try{
+            book = _context.Books
+                .Single(b => b.Id == id);
+        }
+        catch(Exception){
+            return NotFound(new { message = "Book not found" });
         }
 
         book.Title = data.Title;
@@ -61,23 +69,25 @@ public class BooksController : ControllerBase
         book.Author = data.Author;
         _context.SaveChanges();
 
-        return Accepted();
+        return Accepted(new { message = "Book updated" });
     }
 
     [HttpDelete("{id}")]
     public IActionResult DeleteBook(int id)
     {
-        var book = _context.Books
-            .Single(b => b.Id == id);
+        Book? book = null;
 
-        if (book == null)
-        {
-            return NotFound();
+        try{
+            book = _context.Books
+                .Single(b => b.Id == id);
+        }
+        catch(Exception){
+            return NotFound(new { message = "Book not found" });
         }
 
         _context.Books.Remove(book);
         _context.SaveChanges();
 
-        return Accepted();
+        return Accepted(new { message = "Book deleted" });
     }
 }
