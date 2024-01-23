@@ -25,57 +25,65 @@ public class AuthorsController : ControllerBase
     [HttpGet("{id}")]
     public IActionResult GetAuthor(int id)
     {
-        var author = _context.Authors
-            .Single(a => a.Id == id);
-
-        if (author == null)
-        {
-            return NotFound();
+        Author? author = null;
+        try{
+            author = _context.Authors
+                .Single(a => a.Id == id);
         }
-
+        catch(Exception){
+            return NotFound(new { message = "Author not found" });
+        }
+        
         return Ok(author);
     }
 
     [HttpPost]
     public IActionResult CreateAuthor(Author author)
     {
-        _context.Authors.Add(author);
+        _context.Authors.Add(new Author
+        {
+            Name = author.Name
+        });
         _context.SaveChanges();
 
-        return Accepted();
+        return Accepted(new { message = "Author created" });
     }
 
     [HttpPut("{id}")]
     public IActionResult UpdateAuthor(int id, Author data)
     {
-        var author = _context.Authors
-            .Single(a => a.Id == id);
+        Author? author = null;
 
-        if (author == null)
-        {
-            return NotFound();
+        try{
+            author = _context.Authors
+                .Single(a => a.Id == id);
+        }
+        catch(Exception){
+            return NotFound(new { message = "Author not found" });
         }
 
         author.Name = data.Name;
         _context.SaveChanges();
 
-        return Accepted();
+        return Accepted(new { message = "Author updated" });
     }
 
     [HttpDelete("{id}")]
     public IActionResult DeleteAuthor(int id)
     {
-        var author = _context.Authors
-            .Single(a => a.Id == id);
+        Author? author = null;
 
-        if (author == null)
-        {
-            return NotFound();
+        try{
+            author = _context.Authors
+                .Single(a => a.Id == id);
+        }
+        catch(Exception){
+            return NotFound(new { message = "Author not found" });
         }
 
         _context.Authors.Remove(author);
         _context.SaveChanges();
 
-        return Accepted();
+        return Accepted(new { message = "Author deleted" });
     }
 }
